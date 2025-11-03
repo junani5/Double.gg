@@ -2,50 +2,59 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-// NextApiRequest: 프론트엔드에서 보낸 '요청' 정보 (예: ?name=Faker)
-// NextApiResponse: 백엔드에서 프론트엔드로 보낼 '응답' 정보
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   
-  // -------------------
-  // 1. 프론트엔드로부터 '소환사 이름' 받기
-  // -------------------
-  // req.query.name은 http://.../api/getSummoner?name=Faker 에서 'Faker' 부분을 의미
-  const summonerName = req.query.name as string; 
+  // 1. VS Code 터미널에 API 키가 잘 찍히는지 다시 확인합니다.
+  console.log("API 키 확인:", process.env.RIOT_API_KEY ? "로드됨" : "!!! undefined !!!");
 
-  // -------------------
-  // 2. 숨겨둔 'API 키' 꺼내기
-  // -------------------
-  // .env.local에 저장했던 키를 '서버' 안에서만 안전하게 사용
-  const apiKey = process.env.RIOT_API_KEY; 
+  try {
+    const summonerName = req.query.name as string;
+    const apiKey = process.env.RIOT_API_KEY as string;
 
-  // -------------------
-  // 3. 'Riot 서버'에 실제로 데이터 요청하기
-  // -------------------
-  // fetch는 '데이터를 가져오는' JavaScript 기본 명령어
-  const response = await fetch(
-    // 이 주소가 Riot이 정해둔 'TFT 소환사 정보' API 주소
-    `https://kr.api.riotgames.com/tft/summoner/v1/summoners/by-name/${summonerName}` + 
-    // Riot이 정한 규칙대로 주소 끝에 ?api_key=...를 붙여 '열쇠'를 전달
-    `?api_key=${apiKey}`
-  );
+    // 2. 만약 API 키가 'undefined'면, Riot에 요청도 하기 전에 에러 처리
+    if (!apiKey) {
+      throw new Error("서버에 API 키가 설정되지 않았습니다. .env.local 파일을 확인하세요.");
+    }
 
-  // -------------------
-  // 4. Riot 서버가 응답한 결과 처리하기
-  // -------------------
-  
-  // 만약 response.ok가 false라면 (예: 404 Not Found, 403 Forbidden 등)
-  if (!response.ok) {
-    console.error("Riot API Error:", response.statusText);
-    // 프론트엔드에 "에러 났어"라고 알려주기
-    return res.status(response.status).json({ message: 'Riot API에서 에러가 발생했습니다.' });
+    const riotApiUrl = `https://kr.api.riotgames.com/tft/summoner/v1/summoners/by-name/${summonerName}`;
+
+    // 3. Riot API에 헤더 방식으로 요청
+    const response = await fetch(riotApiUrl, {
+      method: 'GET',
+      headers: {
+        "X-Riot-Token": apiKey 
+      }
+    });
+
+    // 4. Riot API가 에러를 보냈을 때 (더 안전한 에러 처리)
+    if (!response.ok) {
+      console.error("Riot API 에러 발생!", "Status:", response.status, response.statusText);
+      
+      // Riot이 보낸 에러 메시지 원본(text)을 우선 받습니다.
+      const errorText = await response.text();
+      console.error("Riot API 원본 에러:", errorText);
+
+      let errorMessage = `Riot API Error (${response.status}): `;
+
+      try {
+        // JSON 형식이면 JSON으로 파싱해서 자세한 메시지 추가
+        const errorData = JSON.parse(errorText);
+        errorMessage += errorData.status.message;
+      } catch (e) {
+        // JSON 형식이 아니면 (예: "Forbidden") 그냥 텍스트를 추가
+        errorMessage += errorText;
+      }
+      
+      throw new Error(errorMessage);
+    }
+
+    // 5. 성공 시
+    const data = await response.json();
+    res.status(200).json(data);
+
+  } catch (error) {
+    // 6. 'getSummoner.ts' 내부에서 발생한 모든 에러를 잡아서 전송
+    console.error("500 에러의 실제 원인:", (error as Error).message);
+    res.status(500).json({ message: (error as Error).message });
   }
-
-  // 에러가 없다면, Riot이 보낸 데이터(JSON)를 JavaScript 객체로 변환
-  const data = await response.json();
-
-  // -------------------
-  // 5. '프론트엔드'에 최종 데이터 전달하기
-  // -------------------
-  // 200(성공) 상태 코드와 함께, 받아온 데이터를 프론트엔드로 전송
-  res.status(200).json(data);
 }
