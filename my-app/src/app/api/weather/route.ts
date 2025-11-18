@@ -33,7 +33,7 @@ async function getKMAWeatherData() {
     const now = new Date();
     const base_date = now.toISOString().slice(0, 10).replace(/-/g, ''); // YYYYMMDD
     // 단기 예보 base_time (예: 0500, 0800 등 3시간 간격) 중 가장 가까운 시간
-    const base_time = '0500'; 
+    const base_time = '1100'; 
 
     const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${apiKey}&pageNo=1&numOfRows=100&dataType=JSON&base_date=${base_date}&base_time=${base_time}&nx=${SEOUL_GRID_X}&ny=${SEOUL_GRID_Y}`;
 
