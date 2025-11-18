@@ -1,60 +1,74 @@
 // src/app/page.tsx
 
-'use client'; // <-- 맨 위에 이 줄을 추가해야 합니다! (중요)
+import { WeatherApiResponse } from '@/types/weather';
+import { NextPage } from 'next';
 
-import { useState } from 'react';
-
-export default function Home() {
-  const [name, setName] = useState(''); // 검색할 이름
-  const [data, setData] = useState<any>(null); // Riot API 결과
-  const [loading, setLoading] = useState(false);
-
-  const getTftData = async () => {
-    if (!name) {
-      alert('소환사 이름을 입력하세요.');
-      return;
-    }
-
-    setLoading(true);
-    setData(null);
-
+// 1. API 호출 함수 (서버 컴포넌트에서 직접 호출)
+async function getWeatherData(): Promise<WeatherApiResponse | null> {
     try {
-      // 3단계에서 만든 '내 백엔드 API'를 호출합니다.
-      const response = await fetch(`/api/getSummoner?name=${name}`);
-      const result = await response.json();
+        // 내부 API Route 경로 호출
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/weather`, {
+            cache: 'no-store' // 최신 데이터 유지
+        });
 
-      if (!response.ok) {
-        throw new Error(result.message || '데이터를 가져오는데 실패했습니다.');
-      }
+        if (!response.ok) {
+            console.error(`API 호출 실패: ${response.status} ${response.statusText}`);
+            return null;
+        }
 
-      setData(result); // 성공하면 데이터를 state에 저장
+        const data: WeatherApiResponse = await response.json();
+        return data;
     } catch (error) {
-      alert((error as Error).message);
-    } finally {
-      setLoading(false);
+        console.error("데이터 패치 중 오류 발생:", error);
+        return null;
     }
-  };
-
-  return (
-    <div>
-      <h1>내 롤토체스 통계 사이트</h1>
-
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="소환사 이름 입력"
-      />
-      <button onClick={getTftData} disabled={loading}>
-        {loading ? '검색 중...' : '전적 검색'}
-      </button>
-
-      {/* 데이터가 있으면 JSON 형태로 예쁘게 보여주기 */}
-      {data && (
-        <pre style={{ backgroundColor: '#eee', padding: '10px' }}>
-          {JSON.stringify(data, null, 2)}
-        </pre>
-      )}
-    </div>
-  );
 }
+
+// 2. 메인 페이지 컴포넌트
+const HomePage: NextPage = async () => {
+    const weatherData = await getWeatherData();
+
+    if (!weatherData) {
+        return (
+            <div style={{ padding: '20px', textAlign: 'center', backgroundColor: '#f9f9f9' }}>
+                <h1>❌ API 연결 오류</h1>
+                <p>백엔드 서버 또는 기상청 API 연동을 확인해 주세요.</p>
+            </div>
+        );
+    }
+
+    return (
+        <div style={{ 
+            padding: '40px', 
+            maxWidth: '600px', 
+            margin: '0 auto', 
+            border: '1px solid #ccc',
+            borderRadius: '8px',
+            backgroundColor: '#ffffff'
+        }}>
+            <h1>WeatherFit 기본 테스트 결과</h1>
+            <hr style={{ margin: '20px 0' }} />
+
+            <h2>📍 지역 및 현재 날씨</h2>
+            <p><strong>지역:</strong> {weatherData.region}</p>
+            <p><strong>현재 기온:</strong> <span style={{ fontSize: '24px', fontWeight: 'bold', color: '#e74c3c' }}>{weatherData.currentTemperature}°C</span></p>
+            <p><strong>날씨 상태:</strong> {weatherData.weatherStatus}</p>
+
+            <h2 style={{ marginTop: '30px' }}>🧥 옷차림 추천</h2>
+            {weatherData.recommendation.length > 0 ? (
+                <ul style={{ listStyleType: 'disc', paddingLeft: '20px' }}>
+                    {weatherData.recommendation.map((item, index) => (
+                        <li key={index} style={{ marginBottom: '5px' }}>{item}</li>
+                    ))}
+                </ul>
+            ) : (
+                <p>추천된 옷차림이 없습니다. 규칙 정의를 확인해주세요.</p>
+            )}
+
+            <hr style={{ margin: '20px 0' }} />
+            <p style={{ fontSize: '12px', color: '#888' }}>* 이 페이지는 `route.ts`의 기본 기능 테스트용입니다. 디자인은 적용되지 않았습니다.</p>
+        </div>
+    );
+};
+
+export default HomePage;
