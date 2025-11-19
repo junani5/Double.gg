@@ -1,0 +1,30 @@
+[
+  {
+    "userId": "user_xx76kpr",
+    "temp": 5,
+    "offset": -2,
+    "feedback": "hot",
+    "timestamp": 1763531486112
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 5,
+    "offset": -2,
+    "feedback": "hot",
+    "timestamp": 1763531494596
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 5,
+    "offset": -2,
+    "feedback": "cold",
+    "timestamp": 1763531503101
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 5,
+    "offset": -2,
+    "feedback": "just_right",
+    "timestamp": 1763531532042
+  }
+]

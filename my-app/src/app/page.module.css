@@ -91,4 +91,24 @@
     .sectionTitle { font-size: 15px; }
 }
 
+.feedbackButton {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.feedbackButton:hover:not(:disabled) {
+    opacity: 0.8;
+}
+
+.feedbackButton:disabled {
+    cursor: not-allowed;
+    background-color: #bdc3c7 !important;
+}
+
 /* ...existing code... */
