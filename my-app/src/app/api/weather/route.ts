@@ -6,14 +6,46 @@ import { NextResponse } from 'next/server';
 // 1. (생략) CLOTHING_RULES 는 그대로 유지
 // ... (이전 코드) ...
 const CLOTHING_RULES = [
-    { min: 28, max: 100, recommendations: ["민소매", "반팔", "반바지"] },
-    { min: 23, max: 27, recommendations: ["반팔", "얇은 셔츠", "면바지"] },
-    { min: 20, max: 22, recommendations: ["블라우스", "긴팔 티", "슬랙스"] },
-    { min: 17, max: 19, recommendations: ["얇은 가디건", "맨투맨", "후드"] },
-    { min: 12, max: 16, recommendations: ["자켓", "가디건", "청자켓", "니트"] },
-    { min: 9, max: 11, recommendations: ["트렌치 코트", "야상", "점퍼"] },
-    { min: 5, max: 8, recommendations: ["울 코트", "히트텍", "가죽 옷"] },
-    { min: -100, max: 4, recommendations: ["패딩", "두꺼운 코트", "목도리"] }
+    { min: 28, max: 100, recommendations: [
+        { name: "민소매", img: "/images/clothing/tank_top.webp" },
+        { name: "반팔", img: "/images/clothing/tshirt.webp" },
+        { name: "반바지", img: "/images/clothing/shorts.webp" },
+    ]},
+    { min: 23, max: 27, recommendations: [
+        { name: "반팔", img: "/images/clothing/tshirt.webp" },
+        { name: "얇은 셔츠", img: "/images/clothing/shirt_light.webp" },
+        { name: "면바지", img: "/images/clothing/cotton_pants.webp" },
+    ]},
+    { min: 20, max: 22, recommendations: [
+        { name: "블라우스", img: "/images/clothing/blouse.webp" },
+        { name: "긴팔 티", img: "/images/clothing/longsleeve.webp" },
+        { name: "슬랙스", img: "/images/clothing/slacks.webp" },
+    ]},
+    { min: 17, max: 19, recommendations: [
+        { name: "얇은 가디건", img: "/images/clothing/cardigan_light.webp" },
+        { name: "맨투맨", img: "/images/clothing/sweatshirt.webp" },
+        { name: "후드", img: "/images/clothing/hoodie.webp" },
+    ]},
+    { min: 12, max: 16, recommendations: [
+        { name: "자켓", img: "/images/clothing/jacket.webp" },
+        { name: "가디건", img: "/images/clothing/cardigan.webp" },
+        { name: "니트", img: "/images/clothing/knit.webp" },
+    ]},
+    { min: 9, max: 11, recommendations: [
+        { name: "트렌치 코트", img: "/images/clothing/trench.webp" },
+        { name: "야상", img: "/images/clothing/field_jacket.webp" },
+        { name: "점퍼", img: "/images/clothing/jumper.webp" },
+    ]},
+    { min: 5, max: 8, recommendations: [
+        { name: "울 코트", img: "/images/clothing/wool_coat.webp" },
+        { name: "히트텍", img: "/images/clothing/heattech.webp" },
+        { name: "가죽 옷", img: "/images/clothing/leather.webp" },
+    ]},
+    { min: -100, max: 4, recommendations: [
+        { name: "패딩", img: "/images/clothing/padding.webp" },
+        { name: "두꺼운 코트", img: "/images/clothing/thick_coat.webp" },
+        { name: "목도리", img: "/images/clothing/scarf.webp" },
+    ]}
 ];
 
 // 2. (생략) 격자 좌표는 그대로 유지
@@ -98,7 +130,7 @@ async function getMLOffset(userId: string, currentTemp: number): Promise<number>
 // ... (이전 코드) ...
 function recommendClothing(temp: number) {
     const rule = CLOTHING_RULES.find(rule => temp >= rule.min && temp <= rule.max);
-    return rule ? rule.recommendations : ["온도 범위를 벗어났습니다."];
+    return rule ? rule.recommendations : [{ name: "온도 범위를 벗어났습니다.", img: "/images/clothing/placeholder.png" }];
 }
 
 // ----------------------------------------------------

@@ -16,7 +16,7 @@ async function sendFeedback(data: { userId: string, temp: number, offset: number
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
         });
-
+        
         if (!response.ok) {
             console.error('Feedback API failed:', response.status);
             alert('피드백 전송에 실패했습니다.'); // 사용자에게 메시지 표시

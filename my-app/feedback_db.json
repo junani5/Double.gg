@@ -26,5 +26,26 @@
     "offset": -2,
     "feedback": "just_right",
     "timestamp": 1763531532042
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 12,
+    "offset": 0,
+    "feedback": "hot",
+    "timestamp": 1763614963515
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 12,
+    "offset": 0,
+    "feedback": "cold",
+    "timestamp": 1763614973088
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 12,
+    "offset": 0,
+    "feedback": "cold",
+    "timestamp": 1763614979665
   }
 ]
