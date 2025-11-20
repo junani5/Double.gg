@@ -1,95 +1,109 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import json
+import os
 
-# Flask 애플리케이션 초기화
 app = Flask(__name__)
-
-# -------------------------------------------------------------------
-# CORS 설정: Next.js가 실행되는 http://localhost:3000 에서 오는 
-# '/predict_offset' 경로의 요청을 허용합니다.
-# -------------------------------------------------------------------
 CORS(app, resources={r"/predict_offset": {"origins": "http://localhost:3000"}})
 
+# -------------------------------------------------------------------
+# 경로 설정: 절대 경로를 사용하여 파일을 확실하게 찾습니다.
+# ml-server 폴더의 상위 폴더(my-app)에 있는 feedback_db.json을 참조합니다.
+# -------------------------------------------------------------------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FEEDBACK_DB_PATH = os.path.join(BASE_DIR, '..', 'feedback_db.json')
+
+# 학습률 설정 (0.25 = 피드백 한 번에 약 25%씩 반영)
+LEARNING_RATE = 0.25
 
 # -------------------------------------------------------------------
-# 1. 개인 맞춤 추천 로직 (더미 ML 모델)
+# 1. 데이터베이스 읽기 (안전하게 읽기)
 # -------------------------------------------------------------------
-def predict_offset(user_id: str, temp: float) -> float:
-    """
-    사용자 ID와 현재 기온을 기반으로 온도 보정 값(Offset)을 반환합니다.
+def read_feedback_db():
+    try:
+        # 파일이 없으면 빈 리스트 반환
+        if not os.path.exists(FEEDBACK_DB_PATH):
+            # print(f"ℹ️ 알림: 아직 피드백 데이터 파일이 없습니다. ({FEEDBACK_DB_PATH})")
+            return []
+            
+        with open(FEEDBACK_DB_PATH, 'r', encoding='utf-8') as f:
+            content = f.read().strip()
+            if not content: # 파일이 비어있는 경우 처리
+                return []
+            return json.loads(content)
+            
+    except json.JSONDecodeError:
+        print("⚠️ 경고: JSON 파일 형식이 올바르지 않습니다. 빈 데이터로 시작합니다.")
+        return []
+    except Exception as e:
+        print(f"❌ DB 읽기 오류 발생: {e}")
+        return []
+
+# -------------------------------------------------------------------
+# 2. 개인 맞춤 보정 값 계산 로직 (점진적 조정)
+# -------------------------------------------------------------------
+def calculate_personal_offset(user_id: str):
+    feedback_data = read_feedback_db()
     
-    오픈소스 과제의 다음 단계에서는, 이 함수를 
-    'scikit-learn으로 학습된 모델(.pkl)을 로드하여 예측하는' 
-    실제 ML 로직으로 대체할 수 있습니다.
+    # 해당 사용자의 피드백만 필터링
+    user_feedback = [entry for entry in feedback_data if entry.get('userId') == user_id]
     
-    반환 값:
-    - 음수(-): 추위를 많이 타는 사용자 (더 두꺼운 옷 추천)
-    - 양수(+): 더위를 많이 타는 사용자 (더 얇은 옷 추천)
-    - 0: 기본 사용자
-    """
+    # 타임스탬프 기준 정렬 (과거 -> 최신)
+    user_feedback.sort(key=lambda x: x.get('timestamp', 0))
     
-    # [임시 규칙 기반 보정 예시]
-    # 나중에 이 user_id는 Next.js가 실제 로그인 시스템에서 받아와야 합니다.
-    
-    if user_id == "cold_sensitive_user":
-        # '추위를 많이 타는 사용자'로 가정
-        # 실제 온도보다 2도 낮게 보정하여 더 두꺼운 옷을 추천하도록 함
-        print(f"로그: {user_id}님 (추위 타는 분) -2.0도 보정 적용")
-        return -2.0
-    
-    elif user_id == "hot_sensitive_user":
-        # '더위를 많이 타는 사용자'로 가정
-        # 실제 온도보다 1.5도 높게 보정하여 더 얇은 옷을 추천하도록 함
-        print(f"로그: {user_id}님 (더위 타는 분) +1.5도 보정 적용")
-        return 1.5
-    
-    else:
-        # 'anonymous' 또는 기타 기본 사용자
-        print(f"로그: {user_id}님 (기본 사용자) 0.0도 보정 적용")
+    if not user_feedback:
         return 0.0
 
+    # 피드백 점수 매핑
+    score_map = {'hot': 1.0, 'just_right': 0.0, 'cold': -1.0}
+
+    # 첫 번째 피드백으로 초기값 설정
+    first_entry = user_feedback[0]
+    cumulative_offset = score_map.get(first_entry.get('feedback'), 0.0) * LEARNING_RATE
+    
+    # 두 번째 피드백부터 점진적으로 값 조정
+    for i in range(1, len(user_feedback)):
+        feedback_type = user_feedback[i].get('feedback')
+        target_score = score_map.get(feedback_type, 0.0)
+
+        # 공식: 새 보정값 = 이전 보정값 + 학습률 * (목표점수 - 이전 보정값)
+        cumulative_offset += LEARNING_RATE * (target_score - cumulative_offset)
+
+    print(f"✅ [ML 로그] 사용자({user_id}) 피드백 {len(user_feedback)}건 분석 -> 보정값: {cumulative_offset:.2f}°C")
+    return round(cumulative_offset, 2)
+
 # -------------------------------------------------------------------
-# 2. API 엔드포인트 정의
+# 3. 예측 API 엔드포인트
 # -------------------------------------------------------------------
 @app.route('/predict_offset', methods=['POST'])
 def predict():
-    """
-    Next.js 백엔드(/api/weather/route.ts)로부터 
-    'userId'와 'currentTemp'를 받아 보정 값을 반환하는 API
-    """
     try:
-        # Next.js가 보낸 JSON 데이터 받기
         data = request.get_json()
-        
-        # 데이터 추출 (기본값 'anonymous' 설정)
+        if not data:
+            return jsonify({'error': 'No data received'}), 400
+
         user_id = data.get('userId', 'anonymous')
         temp = data.get('currentTemp')
         
-        # 필수 값(현재 기온) 확인
         if temp is None:
-            return jsonify({'error': 'Bad Request: currentTemp is required'}), 400
+            return jsonify({'error': 'currentTemp is required'}), 400
 
-        # 1번의 더미 모델 함수 호출
-        offset = predict_offset(user_id, temp)
+        # 보정 값 계산 호출
+        offset = calculate_personal_offset(user_id)
         
-        # Next.js로 보정 값(Offset)을 JSON 형태로 반환
         return jsonify({
             'userId': user_id,
             'temperatureOffset': offset 
         })
         
     except Exception as e:
-        # 서버 내부 오류 발생 시
-        print(f"ML 서버 오류 발생: {e}")
-        return jsonify({'error': f'Internal Server Error: {str(e)}'}), 500
+        print(f"❌ 서버 내부 오류: {e}")
+        return jsonify({'error': str(e)}), 500
 
-# -------------------------------------------------------------------
-# 3. Flask 서버 실행
-# -------------------------------------------------------------------
 if __name__ == '__main__':
     print("========================================")
-    print("💡 ML 서버가 http://127.0.0.1:5000 에서 실행 중입니다...")
+    print(f"💡 ML 서버가 실행 중입니다.")
+    print(f"   - DB 경로: {FEEDBACK_DB_PATH}")
+    print(f"   - 주소: http://127.0.0.1:5000")
     print("========================================")
-    # Next.js(3000번)와 충돌하지 않도록 5000번 포트 사용
-    # debug=True로 설정하여 코드 수정 시 서버가 자동 재시작됩니다.
     app.run(host='0.0.0.0', port=5000, debug=True)

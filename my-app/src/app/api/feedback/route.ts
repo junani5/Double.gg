@@ -1,4 +1,5 @@
 // src/app/api/feedback/route.ts
+export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
 import * as fs from 'fs/promises';
