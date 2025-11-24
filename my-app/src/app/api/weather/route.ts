@@ -22,12 +22,12 @@ const CLOTHING_RULES = [
         { name: "슬랙스", img: "/images/clothing/slacks.webp" },
     ]},
     { min: 17, max: 19, recommendations: [
-        { name: "얇은 가디건", img: "/images/clothing/cardigan_light.webp" },
+        { name: "바람막이", img: "/images/clothing/windbreaker.webp" },
         { name: "맨투맨", img: "/images/clothing/sweatshirt.webp" },
         { name: "후드", img: "/images/clothing/hoodie.webp" },
     ]},
     { min: 12, max: 16, recommendations: [
-        { name: "자켓", img: "/images/clothing/jacket.webp" },
+        { name: "야구점퍼", img: "/images/clothing/baseball_jumper.webp" },
         { name: "가디건", img: "/images/clothing/cardigan.webp" },
         { name: "니트", img: "/images/clothing/knit.webp" },
     ]},

@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react'; // ✨ React Hooks 임포트
 
 // 1. (getWeatherData 함수는 그대로 유지하되, 클라이언트 컴포넌트 내에서는 useEffect 내부에서 호출)
 
-// 2. 피드백 전송 API (서버 액션 대신 클라이언트 fetch 사용)
+// 2. 피드백 전송 API (서버 액션 대신 클라이언트 fetch 사용)[]
 async function sendFeedback(data: { userId: string, temp: number, offset: number, feedback: 'hot' | 'cold' | 'just_right' }) {
     try {
         const response = await fetch('/api/feedback', {
