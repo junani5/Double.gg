@@ -47,5 +47,12 @@
     "offset": 0,
     "feedback": "cold",
     "timestamp": 1763614979665
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 15,
+    "offset": 0,
+    "feedback": "hot",
+    "timestamp": 1763982621421
   }
 ]

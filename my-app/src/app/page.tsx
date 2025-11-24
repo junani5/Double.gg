@@ -1,14 +1,17 @@
-// src/app/page.tsx
-'use client'; // ✨ 클라이언트 컴포넌트로 전환
+'use client'; 
 
 import { WeatherApiResponse } from '@/types/weather';
 import { NextPage } from 'next';
 import styles from './page.module.css';
-import { useState, useEffect } from 'react'; // ✨ React Hooks 임포트
+import { useState, useEffect } from 'react';
 
-// 1. (getWeatherData 함수는 그대로 유지하되, 클라이언트 컴포넌트 내에서는 useEffect 내부에서 호출)
+// 타입 안전성을 위해 추천 아이템의 구조를 명시 (임시 정의)
+interface RecommendationItem {
+    name: string;
+    img: string;
+}
 
-// 2. 피드백 전송 API (서버 액션 대신 클라이언트 fetch 사용)[]
+// 피드백 전송 함수
 async function sendFeedback(data: { userId: string, temp: number, offset: number, feedback: 'hot' | 'cold' | 'just_right' }) {
     try {
         const response = await fetch('/api/feedback', {
@@ -19,7 +22,7 @@ async function sendFeedback(data: { userId: string, temp: number, offset: number
         
         if (!response.ok) {
             console.error('Feedback API failed:', response.status);
-            alert('피드백 전송에 실패했습니다.'); // 사용자에게 메시지 표시
+            alert('피드백 전송에 실패했습니다.');
             return false;
         }
 
@@ -32,15 +35,14 @@ async function sendFeedback(data: { userId: string, temp: number, offset: number
     }
 }
 
-
 const HomePage: NextPage = () => {
     // 상태 관리
     const [weatherData, setWeatherData] = useState<WeatherApiResponse | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [userId, setUserId] = useState('');
-    const [feedbackSent, setFeedbackSent] = useState(false); // 피드백 전송 상태
+    const [feedbackSent, setFeedbackSent] = useState(false); 
 
-    // 💡 임시 사용자 ID 관리 (localStorage 사용)
+    // 사용자 ID 관리
     useEffect(() => {
         let currentUserId = localStorage.getItem('weatherFitUserId');
         if (!currentUserId) {
@@ -50,11 +52,10 @@ const HomePage: NextPage = () => {
         setUserId(currentUserId);
     }, []);
 
-    // 💡 날씨 데이터 가져오기 (클라이언트에서 fetch 호출)
+    // 날씨 데이터 가져오기
     useEffect(() => {
-        // 서버 컴포넌트 함수를 클라이언트에서 재정의
         async function fetchWeather() {
-            if (!userId) return; // ID가 있어야만 실행
+            if (!userId) return; 
 
             const response = await fetch(`/api/weather?userId=${userId}`, { cache: 'no-store' });
             if (response.ok) {
@@ -65,9 +66,9 @@ const HomePage: NextPage = () => {
         }
 
         fetchWeather();
-    }, [userId, feedbackSent]); // userId 또는 피드백 전송 후 재요청
+    }, [userId, feedbackSent]);
 
-    // 💡 피드백 버튼 핸들러
+    // 피드백 버튼 핸들러
     const handleFeedback = async (feedback: 'hot' | 'cold' | 'just_right') => {
         if (!weatherData || feedbackSent) return;
 
@@ -79,7 +80,7 @@ const HomePage: NextPage = () => {
         });
 
         if (success) {
-            setFeedbackSent(true); // 버튼 비활성화
+            setFeedbackSent(true); 
         }
     };
 
@@ -93,7 +94,6 @@ const HomePage: NextPage = () => {
     }
 
     if (!weatherData) {
-        // ... (오류 처리 부분은 그대로 유지)
         return (
             <div className={styles.container} style={{ textAlign: 'center', backgroundColor: '#fff0f0' }}>
                 <h1 style={{ color: '#d9534f' }}>❌ API 연결 오류</h1>
@@ -102,7 +102,7 @@ const HomePage: NextPage = () => {
         );
     }
 
-    // ✨ 스타일 적용 및 UI 렌더링
+    // 스타일 적용
     const offsetStyle = weatherData.offset < 0 ? 
         { color: '#3498db', fontWeight: 'bold' } : 
         weatherData.offset > 0 ?
@@ -113,35 +113,43 @@ const HomePage: NextPage = () => {
         <div className={styles.container}> 
             <h1 className={styles.header}>WeatherFit 개인화 추천 결과</h1>
             
-            <h2 className={styles.sectionTitle}>📍 내 정보</h2>
-            <p style={{ fontSize: '10px', color: '#888' }}>
-                **내 ID (ML 학습 키):** {userId}
-            </p>
-
             <h2 className={styles.sectionTitle}>☀️ 오늘 날씨 정보</h2>
-            {/* ... (날씨 정보 표시 부분은 그대로 유지) ... */}
             <p><strong>지역:</strong> {weatherData.region}</p>
             <p>
                 <strong>실제 기온:</strong> 
-                <span className={styles.temperature} style={{ color: '#555', textDecoration: 'line-through' }}>
+                <span className={styles.temperature} style={{ color: '#555', textDecoration: 'line-through', marginLeft: '5px' }}>
                     {weatherData.currentTemperature.toFixed(1)}°C
                 </span>
             </p>
             <p>
                 <strong>🤖 맞춤 적용 기온:</strong> 
-                <span className={styles.temperature}>
+                <span className={styles.temperature} style={{ marginLeft: '5px' }}>
                     {weatherData.adjustedTemperature.toFixed(1)}°C
                 </span>
             </p>
             <p style={offsetStyle}>
                 (ML 보정 값: {weatherData.offset.toFixed(1)}°C)
             </p>
-            <p><strong>날씨 상태:</strong> {weatherData.weatherStatus}</p>
 
             <h2 className={styles.sectionTitle}>🧥 추천 옷차림 (맞춤형)</h2>
-            <ul className={styles.recommendationList}>
-                {weatherData.recommendation.map((item, index) => (
-                    <li key={index}>{item}</li>
+            
+            {/* 이미지 크기 살짝 확대: 80px -> 100px, li 너비 조정 */}
+            <ul className={styles.recommendationList} style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                {weatherData.recommendation.map((item: any, index: number) => (
+                    <li key={index} style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '120px' }}>
+                        {/* 이미지 렌더링 (크기 증가) */}
+                        <div style={{ width: '100px', height: '100px', marginBottom: '8px', overflow: 'hidden', borderRadius: '10px', backgroundColor: '#f0f0f0' }}>
+                            <img 
+                                src={item.img} 
+                                alt={item.name} 
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                onError={(e) => {
+                                    (e.target as HTMLImageElement).style.display = 'none';
+                                }}
+                            />
+                        </div>
+                        <span style={{ fontSize: '14px', fontWeight: 'bold' }}>{item.name}</span>
+                    </li>
                 ))}
             </ul>
 
@@ -176,5 +184,5 @@ const HomePage: NextPage = () => {
         </div>
     );
 };
-
+ 
 export default HomePage;
