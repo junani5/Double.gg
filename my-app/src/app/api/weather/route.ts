@@ -1,11 +1,10 @@
-// src/app/api/weather/route.ts
 export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
 
 // 1. (생략) CLOTHING_RULES 는 그대로 유지
-// ... (이전 코드) ...
 const CLOTHING_RULES = [
+    // ... (CLOTHING_RULES 내용 그대로 유지) ...
     { min: 28, max: 100, recommendations: [
         { name: "민소매", img: "/images/clothing/tank_top.webp" },
         { name: "반팔", img: "/images/clothing/tshirt.webp" },
@@ -49,12 +48,10 @@ const CLOTHING_RULES = [
 ];
 
 // 2. (생략) 격자 좌표는 그대로 유지
-// ... (이전 코드) ...
 const SEOUL_GRID_X = 60;
 const SEOUL_GRID_Y = 127;
 
 // 3. (생략) getKMAWeatherData 함수는 그대로 유지
-// ... (이전 코드) ...
 async function getKMAWeatherData() {
     const apiKey = process.env.KMA_API_KEY;
     // ... (함수 내용) ...
@@ -83,11 +80,8 @@ async function getKMAWeatherData() {
 }
 
 
-// ----------------------------------------------------
-// 4. ✨ 새로 추가: ML 서버에서 온도 보정 값(Offset) 가져오기
-// ----------------------------------------------------
+// 4. ML 서버에서 온도 보정 값(Offset) 가져오기
 async function getMLOffset(userId: string, currentTemp: number): Promise<number> {
-    // .env.local 파일에서 ML 서버 주소 읽기
     const mlServerUrl = process.env.ML_SERVER_URL;
     if (!mlServerUrl) {
         console.warn("ML_SERVER_URL is not set. Returning 0 offset.");
@@ -111,49 +105,50 @@ async function getMLOffset(userId: string, currentTemp: number): Promise<number>
 
         if (!response.ok) {
             console.error(`ML Server Error: ${response.status} ${response.statusText}`);
-            // ML 서버 오류 시 보정 값 0 반환
             return 0; 
         }
 
         const data = await response.json();
-        // 예측된 온도 보정 값 (예: -2.0, 1.5)
         return parseFloat(data.temperatureOffset || 0);
 
     } catch (error) {
         console.error("ML 서버 연결 실패:", error);
-        // 연결 오류 시 보정 값 0 반환
         return 0; 
     }
 }
 
 // 5. 옷차림 추천 함수 (규칙 기반)는 그대로 유지
-// ... (이전 코드) ...
 function recommendClothing(temp: number) {
     const rule = CLOTHING_RULES.find(rule => temp >= rule.min && temp <= rule.max);
     return rule ? rule.recommendations : [{ name: "온도 범위를 벗어났습니다.", img: "/images/clothing/placeholder.png" }];
 }
 
 // ----------------------------------------------------
-// 6. ✨ 수정된 Next.js GET 요청 핸들러
+// 6. ✨ 수정된 Next.js GET 요청 핸들러 (userId를 쿼리에서 가져옴)
 // ----------------------------------------------------
 export async function GET(request: Request) {
     try {
-        // [임시] 사용자 ID 하드코딩 (ML 서버 테스트용)
-        // 'cold_sensitive_user' 또는 'hot_sensitive_user'로 변경하며 테스트
-        const userId = 'cold_sensitive_user'; 
+        // ✨ 쿼리 파라미터에서 userId 가져오기
+        const url = new URL(request.url);
+        const userId = url.searchParams.get('userId');
+
+        // userId가 없으면 처리 불가
+        if (!userId) {
+             return NextResponse.json({ error: "userId query parameter is missing." }, { status: 400 });
+        }
 
         // 1. 기상청에서 실제 날씨 데이터 가져오기
         const weatherData = await getKMAWeatherData();
         const currentTemp = weatherData.temperature;
 
         if (currentTemp === null) {
-             return NextResponse.json({ error: "날씨 데이터를 가져올 수 없습니다." }, { status: 500 });
+            return NextResponse.json({ error: "날씨 데이터를 가져올 수 없습니다." }, { status: 500 });
         }
         
-        // 2. ✨ ML 서버에서 개인 맞춤 온도 보정 값 가져오기
+        // 2. ✨ ML 서버에서 개인 맞춤 온도 보정 값 가져오기 (사용자 ID 사용)
         const offset = await getMLOffset(userId, currentTemp);
         
-        // 3. ✨ 보정된 최종 온도 계산
+        // 3. 보정된 최종 온도 계산
         const adjustedTemp = currentTemp + offset;
 
         // 4. 보정된 온도를 사용하여 옷차림 추천
@@ -162,9 +157,9 @@ export async function GET(request: Request) {
         // 5. 프론트엔드로 모든 정보 반환
         return NextResponse.json({
             region: "서울 (예시)",
-            currentTemperature: currentTemp,       // 실제 기온
-            adjustedTemperature: adjustedTemp,     // ML 보정 기온
-            offset: offset,                        // 보정 값
+            currentTemperature: currentTemp, 
+            adjustedTemperature: adjustedTemp, 
+            offset: offset, // 보정 값
             weatherStatus: weatherData.weatherStatus,
             recommendation: recommendedClothes,
         });

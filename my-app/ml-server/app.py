@@ -7,40 +7,39 @@ app = Flask(__name__)
 CORS(app, resources={r"/predict_offset": {"origins": "http://localhost:3000"}})
 
 # -------------------------------------------------------------------
-# 경로 설정: 절대 경로를 사용하여 파일을 확실하게 찾습니다.
-# ml-server 폴더의 상위 폴더(my-app)에 있는 feedback_db.json을 참조합니다.
+# 경로 설정
 # -------------------------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FEEDBACK_DB_PATH = os.path.join(BASE_DIR, '..', 'feedback_db.json')
 
-# 학습률 설정 (0.25 = 피드백 한 번에 약 25%씩 반영)
-LEARNING_RATE = 0.25
+# 학습률 설정 (0.2 = 한 번 피드백에 목표치와의 차이의 20%만큼 이동)
+# 예: 현재 0도, 목표 3도일 때 -> 첫 피드백 후 0.6도 증가
+LEARNING_RATE = 0.2
+
+# 최대/최소 보정 범위 설정 (±3도)
+MAX_OFFSET = 3.0
+MIN_OFFSET = -3.0
 
 # -------------------------------------------------------------------
-# 1. 데이터베이스 읽기 (안전하게 읽기)
+# 1. 데이터베이스 읽기
 # -------------------------------------------------------------------
 def read_feedback_db():
     try:
-        # 파일이 없으면 빈 리스트 반환
         if not os.path.exists(FEEDBACK_DB_PATH):
-            # print(f"ℹ️ 알림: 아직 피드백 데이터 파일이 없습니다. ({FEEDBACK_DB_PATH})")
             return []
             
         with open(FEEDBACK_DB_PATH, 'r', encoding='utf-8') as f:
             content = f.read().strip()
-            if not content: # 파일이 비어있는 경우 처리
+            if not content:
                 return []
             return json.loads(content)
             
-    except json.JSONDecodeError:
-        print("⚠️ 경고: JSON 파일 형식이 올바르지 않습니다. 빈 데이터로 시작합니다.")
-        return []
     except Exception as e:
         print(f"❌ DB 읽기 오류 발생: {e}")
         return []
 
 # -------------------------------------------------------------------
-# 2. 개인 맞춤 보정 값 계산 로직 (점진적 조정)
+# 2. 개인 맞춤 보정 값 계산 로직 (±3도 범위)
 # -------------------------------------------------------------------
 def calculate_personal_offset(user_id: str):
     feedback_data = read_feedback_db()
@@ -54,22 +53,27 @@ def calculate_personal_offset(user_id: str):
     if not user_feedback:
         return 0.0
 
-    # 피드백 점수 매핑
-    score_map = {'hot': 1.0, 'just_right': 0.0, 'cold': -1.0}
+    # ✨ 목표 점수 매핑 (±3도 범위로 확장)
+    # Hot: 더우니까 온도를 높게 인식시켜서 얇은 옷 추천 유도 (+3.0 목표)
+    # Cold: 추우니까 온도를 낮게 인식시켜서 두꺼운 옷 추천 유도 (-3.0 목표)
+    score_map = {'hot': 3.0, 'just_right': 0.0, 'cold': -3.0}
 
-    # 첫 번째 피드백으로 초기값 설정
-    first_entry = user_feedback[0]
-    cumulative_offset = score_map.get(first_entry.get('feedback'), 0.0) * LEARNING_RATE
+    # 초기값 설정
+    cumulative_offset = 0.0
     
-    # 두 번째 피드백부터 점진적으로 값 조정
-    for i in range(1, len(user_feedback)):
-        feedback_type = user_feedback[i].get('feedback')
+    # 피드백 이력을 순회하며 학습 (Exponential Moving Average 방식)
+    for entry in user_feedback:
+        feedback_type = entry.get('feedback')
         target_score = score_map.get(feedback_type, 0.0)
 
         # 공식: 새 보정값 = 이전 보정값 + 학습률 * (목표점수 - 이전 보정값)
+        # 피드백이 쌓일수록 사용자의 성향(±3도)에 수렴하게 됨
         cumulative_offset += LEARNING_RATE * (target_score - cumulative_offset)
 
-    print(f"✅ [ML 로그] 사용자({user_id}) 피드백 {len(user_feedback)}건 분석 -> 보정값: {cumulative_offset:.2f}°C")
+    # ✨ 최종 값을 ±3도 사이로 강제 고정 (Clamping)
+    cumulative_offset = max(MIN_OFFSET, min(MAX_OFFSET, cumulative_offset))
+
+    print(f"✅ [ML 로그] 사용자({user_id}) 피드백 {len(user_feedback)}건 -> 최종 보정값: {cumulative_offset:.2f}°C")
     return round(cumulative_offset, 2)
 
 # -------------------------------------------------------------------
@@ -103,7 +107,7 @@ def predict():
 if __name__ == '__main__':
     print("========================================")
     print(f"💡 ML 서버가 실행 중입니다.")
+    print(f"   - 보정 범위: {MIN_OFFSET}°C ~ +{MAX_OFFSET}°C")
     print(f"   - DB 경로: {FEEDBACK_DB_PATH}")
-    print(f"   - 주소: http://127.0.0.1:5000")
     print("========================================")
     app.run(host='0.0.0.0', port=5000, debug=True)

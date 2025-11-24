@@ -1,58 +1,30 @@
 [
   {
     "userId": "user_xx76kpr",
-    "temp": 5,
-    "offset": -2,
-    "feedback": "hot",
-    "timestamp": 1763531486112
-  },
-  {
-    "userId": "user_xx76kpr",
-    "temp": 5,
-    "offset": -2,
-    "feedback": "hot",
-    "timestamp": 1763531494596
-  },
-  {
-    "userId": "user_xx76kpr",
-    "temp": 5,
-    "offset": -2,
-    "feedback": "cold",
-    "timestamp": 1763531503101
-  },
-  {
-    "userId": "user_xx76kpr",
-    "temp": 5,
-    "offset": -2,
-    "feedback": "just_right",
-    "timestamp": 1763531532042
-  },
-  {
-    "userId": "user_xx76kpr",
-    "temp": 12,
-    "offset": 0,
-    "feedback": "hot",
-    "timestamp": 1763614963515
-  },
-  {
-    "userId": "user_xx76kpr",
-    "temp": 12,
+    "temp": 15,
     "offset": 0,
     "feedback": "cold",
-    "timestamp": 1763614973088
-  },
-  {
-    "userId": "user_xx76kpr",
-    "temp": 12,
-    "offset": 0,
-    "feedback": "cold",
-    "timestamp": 1763614979665
+    "timestamp": 1763984097143
   },
   {
     "userId": "user_xx76kpr",
     "temp": 15,
     "offset": 0,
+    "feedback": "cold",
+    "timestamp": 1763984112677
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 15,
+    "offset": -1.08,
+    "feedback": "cold",
+    "timestamp": 1763984406543
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 15,
+    "offset": -1.46,
     "feedback": "hot",
-    "timestamp": 1763982621421
+    "timestamp": 1763984412414
   }
 ]
