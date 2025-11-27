@@ -5,7 +5,7 @@ import { NextPage } from 'next';
 import styles from './page.module.css';
 import { useState, useEffect } from 'react';
 
-// 타입 안전성을 위해 추천 아이템의 구조를 명시 (임시 정의)
+// 타입 안전성을 위해 추천 아이템의 구조를 명시
 interface RecommendationItem {
     name: string;
     img: string;
@@ -84,105 +84,149 @@ const HomePage: NextPage = () => {
         }
     };
 
+    // 로딩 화면 (새로운 디자인 배경색 유지)
     if (isLoading || !userId) {
         return (
-            <div className={styles.container} style={{ textAlign: 'center' }}>
-                <h1 className={styles.header}>로딩 중...</h1>
-                <p>날씨 데이터를 가져오고 있습니다.</p>
+            <div className={styles.container} style={{ justifyContent: 'center', height: '100vh' }}>
+                <h1 style={{ color: '#fff', fontSize: '30px' }}>로딩 중...</h1>
+                <p style={{ color: '#fff' }}>날씨 데이터를 가져오고 있습니다.</p>
             </div>
         );
     }
 
+    // 에러 화면
     if (!weatherData) {
         return (
-            <div className={styles.container} style={{ textAlign: 'center', backgroundColor: '#fff0f0' }}>
-                <h1 style={{ color: '#d9534f' }}>❌ API 연결 오류</h1>
-                <p>백엔드 서버 또는 기상청/ML 서버 연동을 확인해 주세요.</p>
+            <div className={styles.container} style={{ justifyContent: 'center', height: '100vh', background: '#e74c3c' }}>
+                <h1 style={{ color: '#fff' }}>❌ API 연결 오류</h1>
+                <p style={{ color: '#fff' }}>백엔드 서버 또는 기상청/ML 서버 연동을 확인해 주세요.</p>
             </div>
         );
     }
 
-    // 스타일 적용
-    const offsetStyle = weatherData.offset < 0 ? 
-        { color: '#3498db', fontWeight: 'bold' } : 
-        weatherData.offset > 0 ?
-        { color: '#e67e22', fontWeight: 'bold' } : 
-        {};
+    // ML 보정값 색상 스타일 (기존 로직 유지)
+    const offsetColor = weatherData.offset < 0 ? '#3498db' : weatherData.offset > 0 ? '#e67e22' : '#000';
 
     return (
-        <div className={styles.container}> 
-            <h1 className={styles.header}>WeatherFit 개인화 추천 결과</h1>
+        <div className={styles.container}>
             
-            <h2 className={styles.sectionTitle}>☀️ 오늘 날씨 정보</h2>
-            <p><strong>지역:</strong> {weatherData.region}</p>
-            <p>
-                <strong>실제 기온:</strong> 
-                <span className={styles.temperature} style={{ color: '#555', textDecoration: 'line-through', marginLeft: '5px' }}>
-                    {weatherData.currentTemperature.toFixed(1)}°C
-                </span>
-            </p>
-            <p>
-                <strong>🤖 맞춤 적용 기온:</strong> 
-                <span className={styles.temperature} style={{ marginLeft: '5px' }}>
-                    {weatherData.adjustedTemperature.toFixed(1)}°C
-                </span>
-            </p>
-            <p style={offsetStyle}>
-                (ML 보정 값: {weatherData.offset.toFixed(1)}°C)
-            </p>
-
-            <h2 className={styles.sectionTitle}>🧥 추천 옷차림 (맞춤형)</h2>
-            
-            {/* 이미지 크기 살짝 확대: 80px -> 100px, li 너비 조정 */}
-            <ul className={styles.recommendationList} style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                {weatherData.recommendation.map((item: any, index: number) => (
-                    <li key={index} style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '120px' }}>
-                        {/* 이미지 렌더링 (크기 증가) */}
-                        <div style={{ width: '100px', height: '100px', marginBottom: '8px', overflow: 'hidden', borderRadius: '10px', backgroundColor: '#f0f0f0' }}>
-                            <img 
-                                src={item.img} 
-                                alt={item.name} 
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                onError={(e) => {
-                                    (e.target as HTMLImageElement).style.display = 'none';
-                                }}
-                            />
-                        </div>
-                        <span style={{ fontSize: '14px', fontWeight: 'bold' }}>{item.name}</span>
-                    </li>
-                ))}
-            </ul>
-
-            <h2 className={styles.sectionTitle}>💬 오늘 옷차림은 어땠나요?</h2>
-            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '15px' }}>
-                <button 
-                    onClick={() => handleFeedback('hot')} 
-                    disabled={feedbackSent}
-                    className={styles.feedbackButton} 
-                    style={{ backgroundColor: '#f39c12' }}
-                >
-                    🔥 더웠어요
-                </button>
-                <button 
-                    onClick={() => handleFeedback('just_right')} 
-                    disabled={feedbackSent}
-                    className={styles.feedbackButton}
-                    style={{ backgroundColor: '#2ecc71' }}
-                >
-                    👍 딱 좋았어요
-                </button>
-                <button 
-                    onClick={() => handleFeedback('cold')} 
-                    disabled={feedbackSent}
-                    className={styles.feedbackButton}
-                    style={{ backgroundColor: '#3498db' }}
-                >
-                    🥶 추웠어요
-                </button>
+            {/* 1. 타이틀 섹션 */}
+            <div className={styles.title}>
+                <h1 className={styles['title-text']}>WeatherFit 개인화 추천 결과</h1>
+                <div className={styles['title-line']}></div>
             </div>
-            {feedbackSent && <p style={{ textAlign: 'center', color: '#2ecc71', marginTop: '10px' }}>오늘 피드백 완료. 감사합니다!</p>}
+
+            {/* 2. 컨텐츠 섹션 (날씨, 추천, 피드백을 감싸는 래퍼) */}
+            <div className={styles.content}>
+                
+                {/* 2-1. 날씨 정보 섹션 (오늘 날씨 + 개인화 기온) */}
+                <div className={styles['weather-section']}>
+                    {/* 왼쪽: 오늘 날씨 */}
+                    <div className={styles['weather-today']}>
+                        <div className={styles['weather-today-top']}>오늘 날씨 정보</div>
+                        <div className={styles['weather-today-bot']}>
+                            지역: {weatherData.region}<br />
+                            실제 기온: {weatherData.currentTemperature.toFixed(1)}°C
+                        </div>
+                    </div>
+
+                    {/* 오른쪽: 개인화 기온 */}
+                    <div className={styles['weather-personal']}>
+                        <div className={styles['weather-personal-top']}>맞춤 적용 기온</div>
+                        <div className={styles['weather-personal-top']}>
+                            {weatherData.adjustedTemperature.toFixed(1)}°C<br />
+                            <span style={{ fontSize: '24px', color: offsetColor }}>
+                                (ML 보정: {weatherData.offset > 0 ? '+' : ''}{weatherData.offset.toFixed(1)}°C)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 2-2. 옷차림 추천 섹션 */}
+                <div className={styles['fit-section']}>
+                    <div className={styles['fit-text']}>추천 옷차림 (맞춤형)</div>
+                    
+                    <div className={styles['fit-images']}>
+                        {weatherData.recommendation.map((item: RecommendationItem, index: number) => (
+                            <div key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '150px' }}>
+                                <div style={{ 
+                                    width: '120px', 
+                                    height: '120px', 
+                                    marginBottom: '15px', 
+                                    overflow: 'hidden', 
+                                    borderRadius: '20px', 
+                                    backgroundColor: '#f0f0f0',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}>
+                                    <img 
+                                        src={item.img} 
+                                        alt={item.name} 
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        onError={(e) => {
+                                            (e.target as HTMLImageElement).style.display = 'none';
+                                        }}
+                                    />
+                                </div>
+                                <span style={{ 
+                                    color: '#000', 
+                                    fontSize: '24px', 
+                                    fontWeight: '500',
+                                    fontFamily: 'Pretendard' 
+                                }}>
+                                    {item.name}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* 2-3. 피드백 섹션 */}
+                <div className={styles['feedback-section']}>
+                    <div className={styles['feedback-top']}>💬 오늘 옷차림은 어땠나요?</div>
+                    
+                    {!feedbackSent ? (
+                        <div className={styles['feedback-bot']}>
+                            {/* 더웠어요 버튼 */}
+                            <button 
+                                onClick={() => handleFeedback('hot')}
+                                className={styles['feedback-hot']}
+                                style={{ background: 'none', cursor: 'pointer' }} // 버튼 기본 스타일 초기화
+                            >
+                                <span className={styles['feedback-text']}>🔥 더웠어요</span>
+                            </button>
+
+                            {/* 딱 좋았어요 버튼 */}
+                            <button 
+                                onClick={() => handleFeedback('just_right')}
+                                className={styles['feedback-good']}
+                                style={{ background: 'none', cursor: 'pointer' }}
+                            >
+                                <span className={styles['feedback-text']}>👍 딱 좋았어요</span>
+                            </button>
+
+                            {/* 추웠어요 버튼 */}
+                            <button 
+                                onClick={() => handleFeedback('cold')}
+                                className={styles['feedback-cold']}
+                                style={{ background: 'none', cursor: 'pointer' }}
+                            >
+                                <span className={styles['feedback-text']}>🥶 추웠어요</span>
+                            </button>
+                        </div>
+                    ) : (
+                        <div className={styles['feedback-bot']}>
+                            <p className={styles['feedback-text']} style={{ color: '#2ecc71', fontWeight: 'bold' }}>
+                                소중한 피드백이 반영되었습니다. 감사합니다!
+                            </p>
+                        </div>
+                    )}
+                </div>
+
+            </div>
         </div>
     );
 };
- 
+
 export default HomePage;
