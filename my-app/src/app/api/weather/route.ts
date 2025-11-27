@@ -156,7 +156,7 @@ export async function GET(request: Request) {
 
         // 5. 프론트엔드로 모든 정보 반환
         return NextResponse.json({
-            region: "서울 (예시)",
+            region: "서울특별시", // 예시로 서울 고정
             currentTemperature: currentTemp, 
             adjustedTemperature: adjustedTemp, 
             offset: offset, // 보정 값

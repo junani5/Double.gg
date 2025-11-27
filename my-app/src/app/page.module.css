@@ -1,271 +1,233 @@
-/* filepath: c:\Users\user\Documents\GitHub\Double.gg\my-app\src\app\page.module.css */
-/* 기본(데스크탑 1440px 기준) + 반응형 적용 */
-
-:root{
-    /* 기본 폰트 사이즈를 루트에서 제어하면 반응형 조정 쉬움 */
-    --bg-gradient: linear-gradient(180deg, #002B64 0%, #65A8FF 100%);
-    --container-max: 1440px;
-    --content-max: 1300px;
-    --card-radius: 70px;
-    --accent-black: #000;
-    --text-main: 32px;
-    --text-large: 55px;
-}
-
-/* 컨테이너: 중앙 정렬, 가로 100% 대응 */
 .container{
-    width: 100%;
-    max-width: var(--container-max);
-    margin: 0 auto;
-    padding: clamp(40px, 8vw, 202px) clamp(20px, 7vw, 107px);
-    box-sizing: border-box;
-    background: var(--bg-gradient);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(24px, 3vw, 77px);
+    width: 100%;
+    gap: 20px;
+    padding: 20px;
+    background: linear-gradient(180deg, #002B64 0%, #65A8FF 100%);
+
+    /* 변경: 세로가 뷰포트를 넘기면 잘리도록 설정 */
+    box-sizing: border-box;
+    max-height: 100vh;   /* 뷰포트 높이 이상으로 커지지 않음 */
+    overflow: hidden;    /* 초과한 세로 내용은 잘림(스크롤 없음) */
+}  
+
+.content{
+    display: flex;
+align-items: center;
+gap: 106px;
 }
 
-/* 타이틀 블록 */
-.title{
+.spacer{
     display: flex;
-    width: 100%;
-    max-width: var(--content-max);
-    flex-direction: column;
-    align-items: center;
-    gap: clamp(24px, 3vw, 54px);
-    box-sizing: border-box;
+width: 840px;
+flex-direction: column;
+align-items: flex-end;
+gap: 20px;
+}
+
+.title{
+display: flex;
+width: 90%;
+flex-direction: column;
+align-items: center;
+gap: 20px;
 }
 
 .title-text{
-    color: #FFF;
-    font-family: KNPSOdaesan, Pretendard, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    font-size: clamp(32px, 6vw, 96px);
-    font-weight: 400;
-    line-height: 0.95;
-    text-align: center;
+color: #FFF;
+font-family: KNPSOdaesan;
+font-size: 76px;
+font-style: normal;
+font-weight: 400;
+line-height: 75px; /* 78.125% */
 }
+
 
 .title-line{
-    width: 100%;
-    max-width: var(--content-max);
-    height: 5px;
-    background: #FFF;
-    border-radius: 4px;
+width: 100%;
+height: 5px;
+background: #FFF;
 }
 
-/* 컨텐츠 래퍼 */
-.content{
-    width: 100%;
-    max-width: var(--content-max);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: clamp(24px, 3vw, 72px);
-    box-sizing: border-box;
-}
-
-/* 날씨 섹션 래퍼: 데스크탑에서는 가로 정렬, 모바일에서 세로 정렬 */
 .weather-section{
-    width: 100%;
     display: flex;
-    gap: clamp(16px, 2.5vw, 72px);
-    align-items: stretch;
-    justify-content: center;
-    box-sizing: border-box;
+align-items: center;
+gap: 82px;
 }
 
-/* 날씨 카드 공통 스타일 */
-.weather-today,
-.weather-personal{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    border-radius: 90px;
-    background: #FFF;
-    box-sizing: border-box;
-    min-width: 240px;
-}
-
-/* 패딩은 화면 크기에 따라 유동적으로 */
 .weather-today{
-    padding: clamp(16px, 3vw, 30px) clamp(8px, 2.5vw, 10px);
+display: inline-flex;
+padding: 30px 100px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+border-radius: 90px;
+background: #FFF;
 }
+
+.weather-today-top{
+color: #000;
+text-align: center;
+font-family: Pretendard;
+font-size: 32px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+
+.weather-today-bot{
+    color: #000;
+text-align: center;
+font-family: Pretendard;
+font-size: 24px;
+font-style: normal;
+font-weight: 400;
+line-height: 40px; /* 166.667% */
+}
+
 
 .weather-personal{
-    padding: clamp(24px, 4vw, 50px);
+display: inline-flex;
+padding: 50px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+border-radius: 90px;
+background: #FFF;
 }
 
-/* 텍스트 스타일 */
-.weather-today-top,
 .weather-personal-top{
-    color: var(--accent-black);
-    text-align: center;
-    font-family: Pretendard, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    font-size: clamp(20px, 2.4vw, 32px);
-    font-weight: 700;
-    margin: 0;
+   color: #000;
+text-align: center;
+font-family: Pretendard;
+font-size: 32px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
 }
 
-.weather-today-bot,
 .weather-personal-bot{
-    color: var(--accent-black);
-    text-align: center;
-    font-family: Pretendard, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    font-size: clamp(16px, 1.8vw, 24px);
-    font-weight: 400;
-    line-height: 1.6;
+  color: #000;
+text-align: center;
+font-family: Pretendard;
+font-size: 24px;
+font-style: normal;
+font-weight: 400;
+line-height: 64px; /* 266.667% */
 }
 
-/* fit-section (추천 옷차림 카드) */
 .fit-section{
-    display: flex;
-    width: 100%;
-    max-width: 840px;
-    padding: clamp(24px, 4vw, 86px) clamp(16px, 4vw, 64px);
-    flex-direction: column;
-    align-items: center;
-    gap: clamp(12px, 2vw, 30px);
-    border-radius: var(--card-radius);
-    background: #FFF;
-    box-sizing: border-box;
+   display: flex;
+width: 840px;
+padding: 50px 64px;
+flex-direction: column;
+align-items: center;
+gap: 25px;
+border-radius: 70px;
+background: #FFF;
 }
 
 .fit-text{
-    color: var(--accent-black);
-    text-align: center;
-    font-family: Pretendard, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    font-size: clamp(24px, 3.8vw, 55px);
-    font-weight: 700;
-    margin: 0;
+   color: #000;
+text-align: center;
+font-family: Pretendard;
+font-size: 55px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
 }
 
-/* 추천 이미지 행: 래핑 허용 */
 .fit-images{
     display: flex;
-    align-items: flex-start;
-    gap: clamp(12px, 2vw, 32px);
-    flex-wrap: wrap;
-    justify-content: center;
+align-items: flex-start;
+gap: 32px;
 }
 
-/* 이미지 카드 내부 정렬 */
-.fit-images > * {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-}
-
-/* 추천 이미지 (크기 유동적으로 조정) */
-.fit-images img,
-.fit-images .image,
-.fit-images .img {
-    width: clamp(80px, 12vw, 140px);
-    height: clamp(80px, 12vw, 140px);
-    object-fit: cover;
-    border-radius: 20px;
-    background: #f0f0f0;
-    display: block;
-}
-
-/* 추천 텍스트 */
-.fit-images span,
-.fit-images .text {
-    font-size: clamp(14px, 1.7vw, 24px);
-    font-weight: 500;
-    color: var(--accent-black);
-    text-align: center;
-}
-
-/* 피드백 섹션 */
 .feedback-section{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: clamp(20px, 4vw, 100px) clamp(16px, 4vw, 50px);
-    gap: clamp(16px, 3vw, 60px);
-    border-radius: var(--card-radius);
-    background: #FFF;
-    box-sizing: border-box;
+display: inline-flex;
+padding: 70px 50px;
+flex-direction: column;
+align-items: center;
+gap: 60px;
+border-radius: 70px;
+background: #FFF;
 }
 
 .feedback-top{
-    color: var(--accent-black);
-    text-align: center;
-    font-family: Pretendard, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    font-size: clamp(20px, 2.6vw, 32px);
-    font-weight: 700;
-    margin: 0;
+  color: #000;
+text-align: center;
+font-family: Pretendard;
+font-size: 32px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
 }
 
 .feedback-bot{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: clamp(12px, 2.5vw, 60px);
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 30px;
 }
 
-/* 피드백 버튼 박스 스타일 */
+.feedback-text{
+    color: #000;
+font-family: Pretendard;
+font-size: 35px;
+font-style: normal;
+font-weight: 400;
+line-height: 47px; /* 134.286% */
+white-space: nowrap;
+}
+
 .feedback-box{
     display: flex;
-    gap: clamp(12px, 2vw, 24px);
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-/* 버튼 텍스트 */
-.feedback-text{
-    color: var(--accent-black);
-    font-family: Pretendard, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    font-size: clamp(16px, 1.9vw, 32px);
-    font-weight: 400;
-}
-
-/* 버튼 형태(기본) — JS에서 배경색 지정 가능하므로 테두리만 지정 */
-.feedback-box > * {
-    display: flex;
-    padding: clamp(6px, 1.5vw, 9px) clamp(12px, 3vw, 20px);
+    padding: 9px 20px;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 7px;
     border-radius: 41px;
-    border: 1px solid var(--accent-black);
-    background: transparent;
-    cursor: pointer;
-    min-width: clamp(100px, 20vw, 160px);
+    border: 1px solid #000;
+    transition: transform 200ms ease, background-color 180ms ease;
+    transform: translateY(0);
+    will-change: transform;
+    background: transparent; /* 기본은 투명 */
     box-sizing: border-box;
 }
 
-/* 반응형 브레이크포인트: 중간/작은 화면에서 레이아웃 변경 */
-@media (max-width: 1200px) {
-    .container { padding: clamp(32px, 6vw, 100px) clamp(18px, 6vw, 80px); }
-    .title-text { font-size: clamp(28px, 5.5vw, 72px); }
-    .fit-section { max-width: 720px; }
+/* 자식 요소는 박스 내부에서 꽉 차도록 설정 (세로 스택일 경우 각 버튼이 가로 영역을 채움) */
+.feedback-box > * {
+    transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    cursor: pointer;
+    width: 100%;          /* 전체 너비 차지 */
+    box-sizing: border-box;
+    background: transparent; /* 기본은 투명으로 두어 박스 배경이 보이게 함 */
+    border: none;         /* 박스 전체 색이 보이도록 테두리 제거 */
+    padding: 10px 14px;
+    border-radius: 10px;  /* 버튼 각은 흐리게 유지 (선택) */
 }
 
+/* 호버 시 박스 전체가 채워지고 내부 텍스트는 흰색으로 변경 */
+.feedback-box:hover {
+    transform: translateY(-6px);
+    background: #3498db;   /* 박스 전체 배경색 */
+    border-color: #3498db;
+    box-shadow: 0 10px 20px rgba(52, 152, 219, 0.18);
+}
+
+/* 박스가 채워진 상태에서 자식 요소는 투명하게 유지하여 '깔끔하게 채워진' 효과 */
+.feedback-box:hover > * {
+    background: transparent !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* 모바일/작은 화면에서 버튼 간 간격 확보: 세로 스택에서 여백 유지 */
 @media (max-width: 900px) {
-    .container { padding: 48px 28px; gap: 40px; }
-    .title-text { font-size: clamp(22px, 6.5vw, 48px); }
-    .weather-section { flex-direction: column; gap: 20px; align-items: center; }
-    .weather-today, .weather-personal { width: 100%; max-width: 720px; }
-    .fit-section { padding: 32px; width: 100%; max-width: 680px; }
-    .fit-images img { width: clamp(80px, 18vw, 120px); height: clamp(80px, 18vw, 120px); }
-    .feedback-section { padding: 28px; width: 100%; max-width: 720px; }
+    .feedback-box { gap: 12px; }
+    .feedback-box > * { border-radius: 8px; }
 }
-
-@media (max-width: 600px) {
-    .container { padding: 28px 16px; gap: 28px; background-position: center; }
-    .title-text { font-size: clamp(18px, 7vw, 36px); }
-    .title-line { max-width: 100%; }
-    .fit-section { padding: 20px; max-width: 100%; width: 100%; }
-    .fit-images { gap: 12px; }
-    .fit-images img { width: clamp(70px, 22vw, 100px); height: clamp(70px, 22vw, 100px); }
-    .feedback-box > * { min-width: 90px; padding: 8px 12px; }
-}
-
-/* 접근성/기타: 이미지가 없는 경우 대비 */
-img { max-width: 100%; height: auto; display: block; }
-

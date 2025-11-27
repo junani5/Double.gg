@@ -3,42 +3,84 @@
     "userId": "user_xx76kpr",
     "temp": 7,
     "offset": 0,
-    "feedback": "cold",
-    "timestamp": 1764206018596
-  },
-  {
-    "userId": "user_xx76kpr",
-    "temp": 7,
-    "offset": -0.6,
-    "feedback": "cold",
-    "timestamp": 1764206022733
-  },
-  {
-    "userId": "user_xx76kpr",
-    "temp": 7,
-    "offset": -1.08,
-    "feedback": "cold",
-    "timestamp": 1764206025475
-  },
-  {
-    "userId": "user_xx76kpr",
-    "temp": 7,
-    "offset": -1.46,
-    "feedback": "cold",
-    "timestamp": 1764206027844
-  },
-  {
-    "userId": "user_xx76kpr",
-    "temp": 7,
-    "offset": -1.77,
-    "feedback": "cold",
-    "timestamp": 1764206030789
-  },
-  {
-    "userId": "user_xx76kpr",
-    "temp": 7,
-    "offset": -2.02,
     "feedback": "hot",
-    "timestamp": 1764206099301
+    "timestamp": 1764223702594
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 7,
+    "offset": 0,
+    "feedback": "just_right",
+    "timestamp": 1764223704779
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 7,
+    "offset": 0,
+    "feedback": "hot",
+    "timestamp": 1764223879379
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 7,
+    "offset": 0,
+    "feedback": "hot",
+    "timestamp": 1764225013777
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 7,
+    "offset": 0,
+    "feedback": "hot",
+    "timestamp": 1764225403355
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 7,
+    "offset": 0,
+    "feedback": "just_right",
+    "timestamp": 1764225405468
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 7,
+    "offset": 0,
+    "feedback": "cold",
+    "timestamp": 1764225407386
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 7,
+    "offset": 0,
+    "feedback": "just_right",
+    "timestamp": 1764225410703
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 7,
+    "offset": 0,
+    "feedback": "hot",
+    "timestamp": 1764225439651
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 7,
+    "offset": 0,
+    "feedback": "hot",
+    "timestamp": 1764225442877
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 7,
+    "offset": 0,
+    "feedback": "hot",
+    "timestamp": 1764225442979
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": 7,
+    "offset": 0,
+    "feedback": "just_right",
+    "timestamp": 1764225464327
   }
 ]
