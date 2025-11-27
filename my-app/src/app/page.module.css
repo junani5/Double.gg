@@ -1,122 +1,203 @@
-/* ...existing code... */
+.container{
+    display: flex;
+    width: 100%;
+    padding: 202px 107px;
+    flex-direction: column;
+    align-items: center;
+    gap: 77px;
+    background: #4997FE;
+}  
 
-/* 전체 컨테이너 */
-.container {
-    padding: 32px;
-    max-width: 820px;
-    margin: 28px auto;
-    border-radius: 12px;
-    background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
-    box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
-    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    color: #111827;
+.title{
     display: flex;
     flex-direction: column;
-    gap: 14px;
-
-    /* 뷰포트 전체 높이로 고정하여 세로 드래그/스크롤 방지 */
-    min-height: 100%;
-    height: 100%;
-    max-height: 100%;
-    overflow-y: hidden;
-    overscroll-behavior-y: none;
-    touch-action: pan-x;
+    align-items: flex-start;
+    gap: 54px;
+    align-self: stretch;
 }
 
-/* 페이지 타이틀 */
-.header {
-    margin: 0;
-    font-size: 22px;
+.title-text{
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 65px;
+    font-style: normal;
     font-weight: 700;
-    color: #0f172a;
+    line-height: 75px; /* 115.385% */
 }
 
-/* 섹션 제목 */
-.sectionTitle {
-    font-size: 16px;
-    margin: 8px 0;
-    color: #0b1220;
-    font-weight: 600;
+.title-line{
+    width: 1206px;
+    height: 5px;
+    background: #FFF;
 }
 
-/* 온도 표기 (기본/보정 온도 모두에 사용) */
-.temperature {
-    font-size: 20px;
-    font-weight: 700;
-    color: #1f2937;
-    margin-left: 8px;
+.content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 72px;
+    align-self: stretch;
 }
 
-/* 취소선(현재 기온에 인라인으로도 적용되지만 기본 스타일로 제공) */
-.temperatureStrike {
-    text-decoration: line-through;
-    color: #6b7280;
-    font-weight: 600;
+.weather-section{
+    display: flex;
+align-items: center;
+gap: 72px;
+align-self: stretch;
 }
 
-/* 보정치 텍스트(색상은 인라인으로도 제어됨) */
-.offsetText {
-    margin-top: 6px;
-    font-size: 14px;
+.weather-today{
+    display: flex;
+padding: 115px 85px;
+flex-direction: column;
+align-items: flex-start;
+gap: 30px;
+border-radius: 70px;
+background: #FFF;
 }
 
-/* 추천 목록 */
-.recommendationList {
-    margin: 8px 0 0 18px;
-    padding: 0;
-    list-style: disc;
-    color: #0b1220;
+.weather-today-top{
+    color: #000;
+text-align: center;
+font-family: Pretendard;
+font-size: 55px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
 }
 
-.recommendationList li {
-    margin: 6px 0;
-    line-height: 1.45;
+.weather-today-bot{
+    color: #000;
+font-family: Pretendard;
+font-size: 35px;
+font-style: normal;
+font-weight: 400;
+line-height: 47px; /* 134.286% */
 }
 
-/* 추천 없을 때 */
-.empty {
-    color: #6b7280;
+
+.weather-personal{
+    display: flex;
+padding: 115px 85px 145px 85px;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
+gap: 30px;
+border-radius: 70px;
+background: #FFF;
 }
 
-/* 에러용 별도 스타일 (필요 시 사용) */
-.errorContainer {
-    padding: 20px;
-    text-align: center;
-    background-color: #fff5f5;
-    border: 1px solid #ffd2d2;
-    color: #7a1f1f;
-    border-radius: 8px;
-    max-width: 640px;
-    margin: 32px auto;
-    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+.weather-personal-top{
+    color: #000;
+text-align: center;
+font-family: Pretendard;
+font-size: 55px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
 }
 
-/* 반응형 */
-@media (max-width: 600px) {
-    .container { padding: 18px; margin: 16px; }
-    .header { font-size: 20px; }
-    .temperature { font-size: 18px; }
-    .sectionTitle { font-size: 15px; }
+.weather-personal-bot{
+    color: #000;
+font-family: Pretendard;
+font-size: 35px;
+font-style: normal;
+font-weight: 400;
+line-height: 64px; /* 182.857% */
 }
 
-.feedbackButton {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-size: 1.1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+.fit-section{
+    display: flex;
+padding: 115px 244px;
+flex-direction: column;
+align-items: center;
+gap: 30px;
+align-self: stretch;
+border-radius: 70px;
+background: #FFF;
 }
 
-.feedbackButton:hover:not(:disabled) {
-    opacity: 0.8;
+.fit-text{
+    color: #000;
+text-align: center;
+font-family: Pretendard;
+font-size: 55px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
 }
 
-.feedbackButton:disabled {
-    cursor: not-allowed;
-    background-color: #bdc3c7 !important;
+.fit-images{
+    display: flex;
+align-items: flex-start;
+gap: 32px;
 }
 
-/* ...existing code... */
+.feedback-section{
+display: flex;
+padding: 115px 259.5px;
+flex-direction: column;
+align-items: center;
+gap: 35px;
+align-self: stretch;
+border-radius: 70px;
+background: #FFF;
+}
+
+.feedback-top{
+    color: #000;
+text-align: center;
+font-family: Pretendard;
+font-size: 55px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+
+.feedback-bot{
+display: flex;
+align-items: flex-start;
+gap: 79px;
+}
+
+.feedback-text{
+    color: #000;
+font-family: Pretendard;
+font-size: 35px;
+font-style: normal;
+font-weight: 400;
+line-height: 47px; /* 134.286% */
+}
+
+.feedback-hot{
+    display: flex;
+padding: 9px 20px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 10px;
+border-radius: 41px;
+border: 1px solid #000;
+}
+
+.feedback-good{
+    display: flex;
+padding: 9px 20px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 10px;
+border-radius: 41px;
+border: 1px solid #000;
+}
+
+.feedback-cold{
+    display: flex;
+padding: 9px 20px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 10px;
+border-radius: 41px;
+border: 1px solid #000;
+}
