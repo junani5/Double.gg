@@ -10,37 +10,37 @@ const CLOTHING_RULES = [
         { name: "반팔", img: "/images/clothing/tshirt.webp" },
         { name: "반바지", img: "/images/clothing/shorts.webp" },
     ]},
-    { min: 23, max: 27, recommendations: [
+    { min: 23, max: 28, recommendations: [
         { name: "반팔", img: "/images/clothing/tshirt.webp" },
         { name: "얇은 셔츠", img: "/images/clothing/shirt_light.webp" },
         { name: "면바지", img: "/images/clothing/cotton_pants.webp" },
     ]},
-    { min: 20, max: 22, recommendations: [
+    { min: 20, max: 23, recommendations: [
         { name: "블라우스", img: "/images/clothing/blouse.webp" },
         { name: "긴팔 티", img: "/images/clothing/longsleeve.webp" },
         { name: "슬랙스", img: "/images/clothing/slacks.webp" },
     ]},
-    { min: 17, max: 19, recommendations: [
+    { min: 17, max: 20, recommendations: [
         { name: "바람막이", img: "/images/clothing/windbreaker.webp" },
         { name: "맨투맨", img: "/images/clothing/sweatshirt.webp" },
         { name: "후드", img: "/images/clothing/hoodie.webp" },
     ]},
-    { min: 12, max: 16, recommendations: [
+    { min: 12, max: 17, recommendations: [
         { name: "야구점퍼", img: "/images/clothing/baseball_jumper.webp" },
         { name: "가디건", img: "/images/clothing/cardigan.webp" },
         { name: "니트", img: "/images/clothing/knit.webp" },
     ]},
-    { min: 9, max: 11, recommendations: [
+    { min: 9, max: 12, recommendations: [
         { name: "트렌치 코트", img: "/images/clothing/trench.webp" },
         { name: "야상", img: "/images/clothing/field_jacket.webp" },
         { name: "점퍼", img: "/images/clothing/jumper.webp" },
     ]},
-    { min: 5, max: 8, recommendations: [
+    { min: 5, max: 9, recommendations: [
         { name: "울 코트", img: "/images/clothing/wool_coat.webp" },
         { name: "히트텍", img: "/images/clothing/heattech.webp" },
         { name: "가죽 옷", img: "/images/clothing/leather.webp" },
     ]},
-    { min: -100, max: 4, recommendations: [
+    { min: -100, max: 5, recommendations: [
         { name: "패딩", img: "/images/clothing/padding.webp" },
         { name: "두꺼운 코트", img: "/images/clothing/thick_coat.webp" },
         { name: "목도리", img: "/images/clothing/scarf.webp" },
