@@ -168,4 +168,4 @@ export async function GET(request: Request) {
         console.error("API Processing Error:", error);
         return NextResponse.json({ error: "내부 서버 오류 발생" }, { status: 500 });
     }
-}
+}  

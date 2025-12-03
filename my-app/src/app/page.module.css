@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    gap: 20px;
+    gap: 39px;
     padding: 20px;
     background: linear-gradient(180deg, #002B64 0%, #65A8FF 100%);
 
@@ -54,7 +54,7 @@ background: #FFF;
 .weather-section{
     display: flex;
 align-items: center;
-gap: 82px;
+gap: 62px;
 }
 
 .weather-today{
@@ -63,7 +63,7 @@ padding: 30px 100px;
 flex-direction: column;
 justify-content: center;
 align-items: center;
-border-radius: 90px;
+border-radius: 50px;
 background: #FFF;
 }
 
@@ -75,6 +75,7 @@ font-size: 32px;
 font-style: normal;
 font-weight: 700;
 line-height: normal;
+white-space:nowrap;
 }
 
 .weather-today-bot{
@@ -90,11 +91,11 @@ line-height: 40px; /* 166.667% */
 
 .weather-personal{
 display: inline-flex;
-padding: 50px;
+padding: 25px 90px;
 flex-direction: column;
 justify-content: center;
 align-items: center;
-border-radius: 90px;
+border-radius: 50px;
 background: #FFF;
 }
 
@@ -106,6 +107,7 @@ font-size: 32px;
 font-style: normal;
 font-weight: 700;
 line-height: normal;
+white-space: nowrap;
 }
 
 .weather-personal-bot{
@@ -121,7 +123,7 @@ line-height: 64px; /* 266.667% */
 .fit-section{
    display: flex;
 width: 840px;
-padding: 50px 64px;
+padding: 35px 64px;
 flex-direction: column;
 align-items: center;
 gap: 25px;

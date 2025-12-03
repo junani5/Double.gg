@@ -1,3 +1,72 @@
 [
-
+  {
+    "userId": "user_xx76kpr",
+    "temp": -5,
+    "offset": 0,
+    "feedback": "hot",
+    "timestamp": 1764747070186
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": -5,
+    "offset": 0,
+    "feedback": "just_right",
+    "timestamp": 1764747072751
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": -5,
+    "offset": 0,
+    "feedback": "hot",
+    "timestamp": 1764747078484
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": -5,
+    "offset": 0,
+    "feedback": "hot",
+    "timestamp": 1764747186701
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": -5,
+    "offset": 1.39,
+    "feedback": "hot",
+    "timestamp": 1764747190288
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": -5,
+    "offset": 1.71,
+    "feedback": "hot",
+    "timestamp": 1764747196316
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": -5,
+    "offset": 1.97,
+    "feedback": "cold",
+    "timestamp": 1764747199809
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": -5,
+    "offset": 0.97,
+    "feedback": "hot",
+    "timestamp": 1764747202760
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": -5,
+    "offset": 1.38,
+    "feedback": "hot",
+    "timestamp": 1764747325767
+  },
+  {
+    "userId": "user_xx76kpr",
+    "temp": -5,
+    "offset": 1.7,
+    "feedback": "cold",
+    "timestamp": 1764747329187
+  }
 ]

@@ -146,8 +146,9 @@ const HomePage: NextPage = () => {
                     </div>
 
                     <div className={styles['weather-personal']}>
+                        <div className={styles['weather-personal-top']}>개인별 체감 온도</div>
                         <div className={styles['weather-personal-top']}>
-                            맞춤 적용 기온 {weatherData.adjustedTemperature.toFixed(1)}°C<br />
+                            {weatherData.adjustedTemperature.toFixed(1)}°C<br />
                             <span className={styles['weather-personal-bot']}>
                                 (사용자 보정: {weatherData.offset > 0 ? '+' : ''}{weatherData.offset.toFixed(1)}°C)
                             </span>
