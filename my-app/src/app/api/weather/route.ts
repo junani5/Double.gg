@@ -13,7 +13,7 @@ const CLOTHING_RULES = [
     { min: 23, max: 28, recommendations: [
         { name: "반팔", img: "/images/clothing/tshirt.webp" },
         { name: "얇은 셔츠", img: "/images/clothing/shirt_light.webp" },
-        { name: "면바지", img: "/images/clothing/cotton_pants.webp" },
+        { name: "얇은 바지", img: "/images/clothing/cotton_pants.webp" },
     ]},
     { min: 20, max: 23, recommendations: [
         { name: "블라우스", img: "/images/clothing/blouse.webp" },
