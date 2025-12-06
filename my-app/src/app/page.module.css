@@ -200,6 +200,16 @@ white-space: nowrap;
     box-sizing: border-box;
 }
 
+.feedback-ment{
+color: #00d0bb;
+font-family: Pretendard;
+font-size: 35px;
+font-style: normal;
+font-weight: 500;
+line-height: 47px; /* 134.286% */
+white-space: nowrap;
+}
+
 /* 자식 요소는 박스 내부에서 꽉 차도록 설정 (세로 스택일 경우 각 버튼이 가로 영역을 채움) */
 .feedback-box > * {
     transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease, border-color 180ms ease;

@@ -227,8 +227,8 @@ const HomePage: NextPage = () => {
                         </div>
                     ) : (
                         <div className={styles['feedback-bot']}>
-                            <p className={styles['feedback-text']} style={{ color: '#2ecc71', fontWeight: 'bold' }}>
-                                소중한 피드백이 반영되었습니다!<br /> 감사합니다!
+                            <p className={styles['feedback-ment']}>
+                                소중한<br /> 피드백이 <br />반영되었습니다!<br /> 감사합니다!
                             </p>
                         </div>
                     )}
