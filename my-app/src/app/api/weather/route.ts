@@ -31,7 +31,7 @@ const CLOTHING_RULES = [
         { name: "니트", img: "/images/clothing/knit.webp" },
     ]},
     { min: 9, max: 12, recommendations: [
-        { name: "트렌치 코트", img: "/images/clothing/trench.webp" },
+        { name: "트렌치 코트", img: "/images/clothing/wool_coat.webp" },
         { name: "야상", img: "/images/clothing/field_jacket.webp" },
         { name: "점퍼", img: "/images/clothing/jumper.webp" },
     ]},
