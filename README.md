@@ -29,7 +29,7 @@
 | :--- | :--- | :--- |
 | **프론트엔드** | **Next.js (App Router), TypeScript** | 고성능 SSR/CSR, 타입 안전성 확보, 컴포넌트 기반 UI |
 | **백엔드 (API)** | **Next.js API Routes** | 기상청 API 프록시 호출, 데이터 전처리, ML 서버 통신 |
-| **머신러닝** | **Python (Flask/FastAPI), Scikit-learn** | 사용자 피드백 데이터 학습 및 개인화 예측 모델 서빙 |
+| **데이터 분석** | **Python (Flask/FastAPI)** | 사용자 피드백 데이터 학습 및 개인화 데이터 제공공 |
 | **데이터** | **기상청 단기/중기 예보 API** | 공공 날씨 데이터 수집 (Open API) |
 | **상태 관리** | **Zustand** (또는 Context API) | 효율적인 전역 상태 관리 |
 
